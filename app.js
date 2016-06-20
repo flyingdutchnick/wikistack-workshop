@@ -15,9 +15,9 @@ app.use(bodyParser.json());
 
 var server = app.listen(3001);
 
-models.User.sync({})
+models.User.sync({ })
 .then(function () {
-    return models.Page.sync({})
+    return models.Page.sync({ })
 })
 .then(function () {
     server.listen(3001, function () {

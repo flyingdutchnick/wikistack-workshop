@@ -25,9 +25,19 @@ var Page = db.define('page',{
 		}
 	}, {
 		getterMethods: {
-			get : function() { return '/wiki/' + this.urlTitle }
+			route : function() { return '/wiki/' + this.urlTitle }
+		}, 
+		hooks: {
+			beforeValidate: function (page){
+				if (page.title){
+					page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '');
+
+				} else {
+					page.urlTitle = Math.random().toString(36).substring(2, 7);
+				}
+			}
 		}
-});
+	});
 
 var User = db.define('user',{
 		name: {
@@ -41,6 +51,8 @@ var User = db.define('user',{
 		}
 		
 });
+
+Page.belongsTo(User, { as: 'author' });
 
 module.exports = {
   Page: Page,
