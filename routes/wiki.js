@@ -28,12 +28,37 @@ router.get('/users', function(req, res, next) {
  	User.findAll({ 
  	})
   	.then(function(users){
-    console.log(users);
     res.render('users', { 
     		users 
     	})
   	}).catch(next)
 });
+
+router.get('/users/:id', function(req, res, next){
+	// var allPages = //query from database
+
+	var user = User.findOne({
+		where:{
+			id: url.params.id
+		}
+	});
+
+
+	var pages = Page.findAll({
+		where:{ 
+			authorid:  req.params.id
+		}
+	});
+
+	Promises.all([user, pages])
+	.then(function(user, pages){
+		res.render('usersPage', {
+			user, pages
+		})
+  	}).catch(next) 
+	// res.redirect('/')
+	//res.send();
+})
 
 router.get('/add', function(req, res, next){
 	res.render('addpage');
